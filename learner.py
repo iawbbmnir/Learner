@@ -2,7 +2,7 @@ from custom_distribution import CustromDistribution
 from adaline import Adaline
 from parameter import Parameter, ParameterNames
 import random
-
+import csv
 
 class Learner:
 
@@ -50,7 +50,9 @@ class Learner:
 
         result = self.runAlgorithm(data)
         # print(str(data[self.param_names.pid]) + "," + str(result))
-
+#         with open('output.csv', 'a', newline='') as csvfile:
+#              spamwriter = csv.writer(csvfile,  quoting=csv.QUOTE_NONNUMERIC)
+#              spamwriter.writerow([str(data[self.param_names.pid]) , str(result)])
 
         self.total_count += 1
         if(data[self.param_names.survival] == result):

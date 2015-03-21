@@ -1,21 +1,12 @@
 from custom_distribution import CustromDistribution
 from adaline import Adaline
-from parameter import Parameter, ParameterNames
-import random
+from parameter import ParameterNames
 
 
 class Learner:
 
     def __init__(self):
         self.param_names = ParameterNames()
-
-        self.pclass_distr = Parameter(self.param_names.pclass)
-        self.sex_distr = Parameter(self.param_names.sex)
-        self.age_distr = Parameter(self.param_names.age)
-        self.sibsp_distr = Parameter(self.param_names.sibsp)
-        self.parch_distr = Parameter(self.param_names.parch)
-        self.fare_distr = Parameter(self.param_names.fare)
-        self.embarked_distr = Parameter(self.param_names.embarked)
 
         self.total_count = 0
         self.total_correct = 0
@@ -50,7 +41,6 @@ class Learner:
 
         result = self.runAlgorithm(data)
         # print(str(data[self.param_names.pid]) + "," + str(result))
-
 
         self.total_count += 1
         if(data[self.param_names.survival] == result):
@@ -87,109 +77,4 @@ class Learner:
             [pr_age, pr_pclass, pr_sex, pr_fare]
         )
 
-
         return output
-
-
-
-
-
-
-        # Update Distribution
-
-        # return 0
-
-        # return self.fuzzyNoLearning(data)
-
-        # if(data[self.param_names.pclass] == '1'):
-        #     return 1
-        # elif(data[self.param_names.pclass] == '2'):
-        #     survived = random.randrange(0, 2, 1)
-        #     # print(survived)
-        #     return survived
-        # elif(data[self.param_names.pclass] == '3'):
-        #     return 0
-
-        # if(data[self.param_names.sex] == 'male'):
-        #     return 0
-        # else:
-        #     return 1
-
-        # Update Distribution for each Parameter
-        # self.runNaiveDistribution(data)
-        # Recalibrate Weight for each Parameter
-
-        # Aggregate Chance of Survival Decision
-
-        # return 0
-
-    # def runNaiveDistribution(self, data):
-    #     # self.pclass_distr =
-    #     return None
-
-    def fuzzyNoLearning(self, data):
-        pr_sex = 0
-        pr_pclass = 0
-        pr_age = 0
-        pr_sibsp = 0
-        pr_parch = 0
-
-        try:
-            if(data[self.param_names.sex] == 'male'):
-                pr_sex = 0
-            else:
-                pr_sex = 1
-
-            if(data[self.param_names.pclass] == '1'):
-                pr_pclass = 1
-            elif(data[self.param_names.pclass] == '2'):
-                pr_pclass = 0.5
-            elif(data[self.param_names.pclass] == '3'):
-                pr_pclass = 0
-
-            age_int = int(data[self.param_names.age])
-            if(age_int < 20):
-                pr_age = 0.48
-            elif(age_int < 40):
-                pr_age = 0.38
-            elif(age_int < 60):
-                pr_age = 0.39
-            elif(age_int < 80):
-                pr_age = 0.27
-
-            sibsp_int = int(data[self.param_names.sibsp])
-            if(sibsp_int < 2):
-                pr_sibsp = 0.394
-            elif(sibsp_int < 4):
-                pr_sibsp = 0.386
-            elif(sibsp_int < 6):
-                pr_sibsp = 0.13
-            elif(sibsp_int < 8):
-                pr_sibsp = 0
-
-            parch_int = int(data[self.param_names.parch])
-            if(parch_int < 2):
-                pr_parch = 0.374
-            elif(parch_int < 4):
-                pr_parch = 0.506
-            elif(parch_int < 6):
-                pr_parch = 0.1
-
-            w_sex = 0.5
-            w_pclass = 0.25
-            w_age = 0.125
-            w_sibsp = 0.0625
-            w_parch = 0.0625
-
-            pr_aggregate = w_sex*pr_sex + w_pclass*pr_pclass + w_age*pr_age + w_parch*pr_parch + w_sibsp*pr_sibsp
-            threshold = 0.383838
-
-            # print(pr_aggregate)
-
-            if(pr_aggregate - threshold > 0):
-                # print("asdsad")
-                return 1    # Alive
-            else:
-                return 0    # Dead
-        except ValueError:
-            return 0

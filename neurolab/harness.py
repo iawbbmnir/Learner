@@ -4,6 +4,7 @@ from learner import Learner
 
 SINGLE_LAYER_PERCEPTRON = 1
 
+
 class ParameterNames:
     def __init__(self):
         self.pid = "Passenger_Id"
@@ -20,41 +21,46 @@ class ParameterNames:
         self.embarked = "Embarking_Port"        # Port of Embarkation (C = Cherbourg; Q = Queenstown; S = Southampton)
 
 
-def main():
-
-    train_file = sys.argv[1]
-    training_data = []
+def loadData(file_name, is_training):
     pn = ParameterNames()
-
-    bad_data_count = 0
-
-    # Load Training Data - WARNING: INSTANCE IS OMITTED IF MISSING VALUE(S)
-    with open(train_file, 'rb') as csvfile:
+    data_list = []
+    # WARNING: FOR TRAINING, INSTANCE IS OMITTED IF MISSING VALUE(S)
+    with open(file_name, 'rb') as csvfile:
         data_reader = csv.reader(csvfile, delimiter=',', quotechar='"')
         for row in data_reader:
             try:
-                data = {
-                    pn.pid:       int(row[0]),
-                    pn.survival:  int(row[1]),
-                    pn.pclass:    int(row[2]),
-                    pn.name:      row[3],
-                    pn.sex:       row[4],
-                    pn.age:       int(row[5]),
-                    pn.sibsp:     int(row[6]),
-                    pn.parch:     int(row[7]),
-                    pn.ticket:    row[8],
-                    pn.fare:      row[9],
-                    pn.cabin:     row[10],
-                    pn.embarked:  row[11],
-                }
-                training_data.append(data)
+                int_age = int(row[5])
             except ValueError:
-                bad_data_count += 1
-                # print("Bad Data")
-                # print(row)
+                int_age = 30  # Average Age
+            data = {
+                pn.pid:       int(row[0]),
+                pn.survival:  int(row[1]),
+                pn.pclass:    int(row[2]),
+                pn.name:      row[3],
+                pn.sex:       row[4],
+                pn.age:       int_age,
+                pn.sibsp:     int(row[6]),
+                pn.parch:     int(row[7]),
+                pn.ticket:    row[8],
+                pn.fare:      row[9],
+                pn.cabin:     row[10],
+                pn.embarked:  row[11],
+            }
+            data_list.append(data)
+
+    return data_list
+
+
+def main():
+
+    train_file = sys.argv[1]
+    test_file = sys.argv[2]
+
+    training_data = loadData(train_file, True)
+    testing_data = loadData(test_file, False)
 
     # Send Training Data to Learner
-    learner = Learner(training_data)
+    learner = Learner(training_data, testing_data)
     learner.run(SINGLE_LAYER_PERCEPTRON)
 
 

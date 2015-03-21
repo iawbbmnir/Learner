@@ -3,8 +3,9 @@ from single_layer_perceptron import *
 
 
 class Learner:
-    def __init__(self, raw_data):
-        self.raw_data = raw_data
+    def __init__(self, train_raw_data, test_raw_data):
+        self.train_raw_data = train_raw_data
+        self.test_raw_data = test_raw_data
         self.pn = ParameterNames()
 
     def run(self, alg):
@@ -18,7 +19,7 @@ class Learner:
         data_domain = []
         data_label = []
 
-        for instance in self.raw_data:
+        for instance in self.train_raw_data:
             inst_age = int(instance[self.pn.age])
             inst_pclass = int(instance[self.pn.pclass])
             inst_sex = 1
@@ -33,13 +34,45 @@ class Learner:
                 instance[self.pn.survival]
             ])
 
+        test_domain = []
+        test_true_label = []
+
+        for instance in self.test_raw_data:
+            inst_age = int(instance[self.pn.age])
+            inst_pclass = int(instance[self.pn.pclass])
+            inst_sex = 1
+            if instance[self.pn.sex] == 'female':
+                inst_sex = 0
+            test_domain.append([
+                inst_sex,
+                inst_age,
+                inst_pclass
+            ])
+            test_true_label.append([
+                instance[self.pn.survival]
+            ])
+
         minMax = self.getMinMaxValues(data_domain)
 
         # Train and Test
         slp = SingleLayerPerceptron(data_domain, data_label, minMax)
-        slp.test(None)
+        test_label = slp.test(test_domain)
+        self.analyzeTest(test_domain, test_label, test_true_label)
 
-
+    def analyzeTest(self, domain, test_label, true_label):
+        total_count = 0
+        total_correct = 0
+        for i in range(0, len(test_label)):
+            test_label_int = int(test_label[i][0])
+            true_label_int = int(true_label[i][0])
+            if test_label_int == true_label_int:
+                total_correct += 1
+            else:
+                print(str(domain[i]) + " -> True:" + str(true_label[i][0]))
+            total_count += 1
+        accuracy = float(total_correct) / float(total_count)
+        print(str(total_correct) + " / " + str(total_count))
+        print(str(accuracy))
 
     def getMinMaxValues(self, data_domain):
         domain_size = len(data_domain[0])

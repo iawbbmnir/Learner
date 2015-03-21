@@ -9,7 +9,7 @@ def main():
 
     print('PassengerId,Survived')
 
-    with open('train.csv', 'rb') as csvfile:
+    with open('train_org.csv', 'rb') as csvfile:
         data_reader = csv.reader(csvfile, delimiter=',', quotechar='"')
         for row in data_reader:
             # Send data to learner

@@ -1,5 +1,6 @@
 from custom_distribution import CustromDistribution
 from adaline import Adaline
+from decision_tree_no_learn import DecisionTreeNoLearn
 from parameter import ParameterNames
 
 
@@ -13,6 +14,8 @@ class Learner:
 
         self.custom_distribution = CustromDistribution()
         self.adaline = Adaline()
+
+        self.dt_no_learn = DecisionTreeNoLearn()
 
     def printAccuracy(self):
         if(self.total_count > 0):
@@ -39,8 +42,8 @@ class Learner:
             self.param_names.embarked:  input[11],
         }
 
-        result = self.runAlgorithm(data)
-        # print(str(data[self.param_names.pid]) + "," + str(result))
+        result = self.runDecisionTreeNoLearn(data)
+        print(str(data[self.param_names.pid]) + "," + str(result))
 
         self.total_count += 1
         if(data[self.param_names.survival] == result):
@@ -48,8 +51,12 @@ class Learner:
 
         return result
 
-    # Run algorithm
-    def runAlgorithm(self, data):
+    def runDecisionTreeNoLearn(self, data):
+        survival = data[self.param_names.survival]
+        # return self.dt_no_learn.runSexClass(data[self.param_names.sex], data[self.param_names.pclass], survival)
+        return self.dt_no_learn.runSexAge(data[self.param_names.sex], data[self.param_names.age], survival)
+
+    def runAdaline(self, data):
 
         pr_age = self.custom_distribution.age.getProb(data[self.param_names.age])
         pr_pclass = self.custom_distribution.pclass.getProb(data[self.param_names.pclass])

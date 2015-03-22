@@ -1,5 +1,6 @@
 from parameter import ParameterNames
 from single_layer_perceptron import *
+from multi_layer_feed_forward_perceptron import *
 
 
 class Learner:
@@ -10,12 +11,12 @@ class Learner:
 
     def run(self, alg):
 
-        # SINGLE_LAYER_PERCEPTRON
-        if alg == 1:
-            self.runSingleLayerPerceptron()
+        # PERCEPTRON
+        if 1 <= alg <= 2:
+            self.runPerceptron(alg)
 
     # Domain: {Sex, Age, PClass}
-    def runSingleLayerPerceptron(self):
+    def runPerceptron(self, alg):
         data_domain = []
         data_label = []
 
@@ -55,9 +56,17 @@ class Learner:
         minMax = self.getMinMaxValues(data_domain)
 
         # Train and Test
-        slp = SingleLayerPerceptron(data_domain, data_label, minMax)
-        test_label = slp.test(test_domain)
-        self.analyzeTest(test_domain, test_label, test_true_label)
+
+        if(alg == 1):
+            # Single Layer Perceptron
+            slp = SingleLayerPerceptron(data_domain, data_label, minMax)
+            test_label = slp.test(test_domain)
+            self.analyzeTest(test_domain, test_label, test_true_label)
+        elif(alg == 2):
+            # Multi Layer Feed Forward Perceptron
+            mlffp = MultiLayerFeedForwardPerceptron(data_domain, data_label, minMax)
+            test_label = mlffp.test(test_domain)
+            self.analyzeTest(test_domain, test_label, test_true_label)
 
     def analyzeTest(self, domain, test_label, true_label):
         total_count = 0
@@ -67,8 +76,8 @@ class Learner:
             true_label_int = int(true_label[i][0])
             if test_label_int == true_label_int:
                 total_correct += 1
-            else:
-                print(str(domain[i]) + " -> True:" + str(true_label[i][0]))
+            # else:
+            #     print(str(domain[i]) + " -> True:" + str(true_label[i][0]))
             total_count += 1
         accuracy = float(total_correct) / float(total_count)
         print(str(total_correct) + " / " + str(total_count))

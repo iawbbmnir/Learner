@@ -1,6 +1,7 @@
 from parameter import ParameterNames
 from single_layer_perceptron import *
 from multi_layer_feed_forward_perceptron import *
+from learning_vector_quantization import *
 
 
 class Learner:
@@ -9,7 +10,7 @@ class Learner:
         self.test_raw_data = test_raw_data
         self.pn = ParameterNames()
 
-    # Domain: {Sex, Age, PClass}
+    # Domain: {Sex, Age, PClass, Fare}
     def run(self, alg):
         data_domain = []
         data_label = []
@@ -18,12 +19,14 @@ class Learner:
             inst_age = int(instance[self.pn.age])
             inst_pclass = int(instance[self.pn.pclass])
             inst_sex = 1
+            inst_fare = instance[self.pn.fare]
             if instance[self.pn.sex] == 'female':
                 inst_sex = 0
             data_domain.append([
                 inst_sex,
                 inst_age,
-                inst_pclass
+                inst_pclass,
+                inst_fare
             ])
             data_label.append([
                 instance[self.pn.survival]
@@ -36,12 +39,14 @@ class Learner:
             inst_age = int(instance[self.pn.age])
             inst_pclass = int(instance[self.pn.pclass])
             inst_sex = 1
+            inst_fare = instance[self.pn.fare]
             if instance[self.pn.sex] == 'female':
                 inst_sex = 0
             test_domain.append([
                 inst_sex,
                 inst_age,
-                inst_pclass
+                inst_pclass,
+                inst_fare
             ])
             test_true_label.append([
                 instance[self.pn.survival]
@@ -61,6 +66,10 @@ class Learner:
             mlffp = MultiLayerFeedForwardPerceptron(data_domain, data_label, minMax)
             test_label = mlffp.test(test_domain)
             self.analyzeTest(test_domain, test_label, test_true_label)
+        elif(alg == 3):
+            lvq = LearningVectorQuantization(data_domain, data_label, minMax)
+            test_label = lvq.test(test_domain)
+            self.analyzeTest(test_domain, test_label, test_true_label)
 
     def analyzeTest(self, domain, test_label, true_label):
         total_count = 0
@@ -70,8 +79,8 @@ class Learner:
             true_label_int = int(true_label[i][0])
             if test_label_int == true_label_int:
                 total_correct += 1
-            # else:
-            #     print(str(domain[i]) + " -> True:" + str(true_label[i][0]))
+            else:
+                print(str(domain[i]) + " -> True:" + str(true_label[i][0]))
             total_count += 1
         accuracy = float(total_correct) / float(total_count)
         print(str(total_correct) + " / " + str(total_count))

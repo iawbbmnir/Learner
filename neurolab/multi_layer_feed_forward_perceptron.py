@@ -11,6 +11,8 @@ class MultiLayerFeedForwardPerceptron:
         # print(label)
         print(minMax)
 
+        print(type(domain))
+
         # Create net with len(minMax) input neurons and 1 output neuron
         self.net = nl.net.newff(minMax, [10, 1])
         self.error = self.net.train(domain, label, epochs=100, show=1)

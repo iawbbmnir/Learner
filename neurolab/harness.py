@@ -30,6 +30,10 @@ def loadData(file_name, is_training):
                 int_age = int(row[5])
             except ValueError:
                 int_age = 30  # Average Age
+            try:
+                float_fare = float(row[9])
+            except ValueError:
+                float_fare = 30
             data = {
                 pn.pid:       int(row[0]),
                 pn.survival:  int(row[1]),
@@ -40,7 +44,7 @@ def loadData(file_name, is_training):
                 pn.sibsp:     int(row[6]),
                 pn.parch:     int(row[7]),
                 pn.ticket:    row[8],
-                pn.fare:      row[9],
+                pn.fare:      float_fare,
                 pn.cabin:     row[10],
                 pn.embarked:  row[11],
             }

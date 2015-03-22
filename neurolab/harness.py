@@ -2,8 +2,6 @@ import csv
 import sys
 from learner import Learner
 
-SINGLE_LAYER_PERCEPTRON = 1
-
 
 class ParameterNames:
     def __init__(self):
@@ -55,13 +53,14 @@ def main():
 
     train_file = sys.argv[1]
     test_file = sys.argv[2]
+    alg_id = int(sys.argv[3])
 
     training_data = loadData(train_file, True)
     testing_data = loadData(test_file, False)
 
     # Send Training Data to Learner
     learner = Learner(training_data, testing_data)
-    learner.run(SINGLE_LAYER_PERCEPTRON)
+    learner.run(alg_id)
 
 
 if __name__ == "__main__":

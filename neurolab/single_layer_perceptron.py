@@ -8,11 +8,12 @@ class SingleLayerPerceptron:
     def __init__(self, domain, label, minMax):
         # print(domain)
         # print(label)
-        # print(minMax)
+        print(minMax)
 
-        # Create net with 2 inputs and 1 neuron
+        # Create net with len(minMax) input neurons and 1 output neuron
         self.net = nl.net.newp(minMax, 1)
-        self.error = self.net.train(domain, label, epochs=1000, show=100, lr=0.5)
+        self.kappa = nl.train.train_delta(domain, label, epochs=100, show=100, lr=0.5)
+        # self.error = self.net.train(domain, label, epochs=100, show=100, lr=0.5)
 
         # Plot results
         # pl.plot(self.error)

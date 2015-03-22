@@ -12,8 +12,7 @@ class SingleLayerPerceptron:
 
         # Create net with len(minMax) input neurons and 1 output neuron
         self.net = nl.net.newp(minMax, 1)
-        self.kappa = nl.train.train_delta(domain, label, epochs=100, show=100, lr=0.5)
-        # self.error = self.net.train(domain, label, epochs=100, show=100, lr=0.5)
+        self.error = self.net.train(domain, label, epochs=100, show=100, lr=0.5)
 
         # Plot results
         # pl.plot(self.error)

@@ -9,14 +9,8 @@ class Learner:
         self.test_raw_data = test_raw_data
         self.pn = ParameterNames()
 
-    def run(self, alg):
-
-        # PERCEPTRON
-        if 1 <= alg <= 2:
-            self.runPerceptron(alg)
-
     # Domain: {Sex, Age, PClass}
-    def runPerceptron(self, alg):
+    def run(self, alg):
         data_domain = []
         data_label = []
 

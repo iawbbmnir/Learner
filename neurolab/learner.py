@@ -20,13 +20,17 @@ class Learner:
             inst_pclass = int(instance[self.pn.pclass])
             inst_sex = 1
             inst_fare = instance[self.pn.fare]
+            inst_sibsp = int(instance[self.pn.sibsp])
+            inst_parch = int(instance[self.pn.parch])
             if instance[self.pn.sex] == 'female':
                 inst_sex = 0
             data_domain.append([
                 inst_sex,
                 inst_age,
                 inst_pclass,
-                inst_fare
+                inst_fare,
+                inst_sibsp,
+                inst_parch
             ])
             data_label.append([
                 instance[self.pn.survival]
@@ -40,19 +44,25 @@ class Learner:
             inst_pclass = int(instance[self.pn.pclass])
             inst_sex = 1
             inst_fare = instance[self.pn.fare]
+            inst_sibsp = int(instance[self.pn.sibsp])
+            inst_parch = int(instance[self.pn.parch])
             if instance[self.pn.sex] == 'female':
                 inst_sex = 0
             test_domain.append([
                 inst_sex,
                 inst_age,
                 inst_pclass,
-                inst_fare
+                inst_fare,
+                inst_sibsp,
+                inst_parch
             ])
             test_true_label.append([
                 instance[self.pn.survival]
             ])
 
+
         minMax = self.getMinMaxValues(data_domain)
+        # print "learner", minMax
 
         # Train and Test
 
@@ -63,7 +73,7 @@ class Learner:
             self.analyzeTest(test_domain, test_label, test_true_label)
         elif(alg == 2):
             # Multi Layer Feed Forward Perceptron
-            mlffp = MultiLayerFeedForwardPerceptron(data_domain, data_label, minMax)
+            mlffp = MultiLayerFeedForwardPerceptron(data_domain, data_label, minMax, test_domain)
             test_label = mlffp.test(test_domain)
             self.analyzeTest(test_domain, test_label, test_true_label)
         elif(alg == 3):
@@ -75,12 +85,18 @@ class Learner:
         total_count = 0
         total_correct = 0
         for i in range(0, len(test_label)):
-            test_label_int = int(test_label[i][0])
-            true_label_int = int(true_label[i][0])
+            test_label_int = float(test_label[i][0])
+            true_label_int = float(true_label[i][0])
+
+            if test_label_int <= 0.5:
+                test_label_int = 0
+            else:
+                test_label_int = 1
+
             if test_label_int == true_label_int:
                 total_correct += 1
-            else:
-                print(str(domain[i]) + " -> True:" + str(true_label[i][0]))
+            # else:
+            #     print(str(domain[i]) + " -> True:" + str(true_label[i][0]))
             total_count += 1
         accuracy = float(total_correct) / float(total_count)
         print(str(total_correct) + " / " + str(total_count))

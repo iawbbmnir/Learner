@@ -8,7 +8,10 @@ class SingleLayerPerceptron:
     def __init__(self, domain, label, minMax):
         # print(domain)
         # print(label)
-        print(minMax)
+        # print(minMax)
+
+        print(type(domain))
+        print(domain)
 
         # Create net with len(minMax) input neurons and 1 output neuron
         self.net = nl.net.newp(minMax, 1)
